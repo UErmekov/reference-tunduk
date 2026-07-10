@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions
+        name="ReferenceService"
+        targetNamespace="urn:kg:university:hub:xsd:producer:v1"
+        xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+        xmlns:tns="urn:kg:university:hub:xsd:producer:v1"
+        xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+        xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+    <wsdl:types>
+        <xs:schema>
+            <xs:import namespace="urn:kg:university:hub:xsd:producer:v1"/>
+        </xs:schema>
+    </wsdl:types>
+
+    <wsdl:message name="CreateRequest">
+        <wsdl:part name="TicketRequest" type="tns:TicketCreateRequestType"/>
+    </wsdl:message>
+    <wsdl:message name="CreateResponse">
+        <wsdl:part name="TicketCreateResponse" type="tns:TicketCreateResponseType"/>
+    </wsdl:message>
+
+    <wsdl:message name="ConfirmRequest">
+        <wsdl:part name="TicketRequest" type="tns:TicketConfirmRequestType"/>
+    </wsdl:message>
+    <wsdl:message name="ConfirmResponse">
+        <wsdl:part name="TicketConfirmResponse" type="tns:TicketConfirmResponseType"/>
+    </wsdl:message>
+
+    <wsdl:message name="RetrieveRequest">
+        <wsdl:part name="TicketRequest" type="tns:TicketRetrieveRequestType"/>
+    </wsdl:message>
+    <wsdl:message name="RetrieveResponse">
+        <wsdl:part name="TicketRetrieveResponse" type="tns:TicketRetrieveResponseType"/>
+    </wsdl:message>
+
+    <wsdl:message name="CancelRequest">
+        <wsdl:part name="TicketRequest" type="tns:TicketCancelRequestType"/>
+    </wsdl:message>
+    <wsdl:message name="CancelResponse">
+        <wsdl:part name="TicketCancelResponse" type="tns:TicketCancelResponseType"/>
+    </wsdl:message>
+
+    <wsdl:portType name="ReferencePort">
+        <wsdl:operation name="create">
+            <wsdl:input message="tns:CreateRequest"/>
+            <wsdl:output message="tns:CreateResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="confirm">
+            <wsdl:input message="tns:ConfirmRequest"/>
+            <wsdl:output message="tns:ConfirmResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="retrieve">
+            <wsdl:input message="tns:RetrieveRequest"/>
+            <wsdl:output message="tns:RetrieveResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="cancel">
+            <wsdl:input message="tns:CancelRequest"/>
+            <wsdl:output message="tns:CancelResponse"/>
+        </wsdl:operation>
+    </wsdl:portType>
+
+    <wsdl:binding name="ReferenceBinding" type="tns:ReferencePort">
+        <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+        <wsdl:operation name="create">
+            <soap:operation soapAction="create"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="confirm">
+            <soap:operation soapAction="confirm"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="retrieve">
+            <soap:operation soapAction="retrieve"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="cancel">
+            <soap:operation soapAction="cancel"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+
+    <wsdl:service name="ReferenceService">
+        <wsdl:port name="ReferencePort" binding="tns:ReferenceBinding">
+            <soap:address location="http://localhost:8080/ws"/>
+        </wsdl:port>
+    </wsdl:service>
+
+</wsdl:definitions>

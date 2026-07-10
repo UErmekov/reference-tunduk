@@ -1,0 +1,21 @@
+spring:
+  application:
+    name: reference
+
+  jpa:
+    generate-ddl: false
+    database-platform: org.hibernate.dialect.MySQLDialect
+    hibernate:
+      ddl-auto: none
+
+  datasource:
+    url: ${DB_URL:jdbc:mysql://localhost/refs}
+    username: ${DB_USERNAME:root}
+    password: ${DB_PASSWORD:root}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  main:
+    allow-bean-definition-overriding: true
+
+services:
+  apikey:
+    key: ${RESTCOUNTRIES_API_KEY}
