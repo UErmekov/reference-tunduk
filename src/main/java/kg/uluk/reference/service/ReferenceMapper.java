@@ -1,5 +1,6 @@
 package kg.uluk.reference.service;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -25,7 +26,7 @@ public class ReferenceMapper {
     this.referenceService = referenceService;
   }
 
-  public TicketCreateResponseType create(TicketCreateRequestType request) {
+  public TicketCreateResponseType create(TicketCreateRequestType request) throws IOException {
     if (request.getParams().getParam() == null) {
       throw new IllegalArgumentException("Params is required");
     }
