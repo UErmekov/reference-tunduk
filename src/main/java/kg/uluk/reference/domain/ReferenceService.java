@@ -1,10 +1,17 @@
 package kg.uluk.reference.domain;
 
 import jakarta.transaction.Transactional;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.UUID;
+import kg.uluk.reference.container.Container;
+import kg.uluk.reference.container.ContainerHelper;
+import kg.uluk.reference.container.Document;
 import kg.uluk.reference.dto.response.ReferenceCancelResponse;
 import kg.uluk.reference.dto.response.ReferenceConfirmResponse;
 import kg.uluk.reference.dto.response.ReferenceCreateResponse;
@@ -29,7 +36,8 @@ public class ReferenceService {
 
   @Transactional
   public ReferenceCreateResponse create(
-      String ticketId, String owner, Map<String, String> params, BigDecimal price, Long duration) {
+      String ticketId, String owner, Map<String, String> params, BigDecimal price, Long duration)
+      throws IOException {
     Optional<Reference> existing = repository.findByTicketId(ticketId);
 
     if (existing.isPresent()) {
@@ -37,7 +45,23 @@ public class ReferenceService {
     }
 
     CountryResponse.Country country = countryInfoService.fetchCountryInfo(params);
-    byte[] content = objectMapper.writeValueAsBytes(country);
+
+    byte[] jsonBytes = objectMapper.writeValueAsBytes(country);
+
+    ByteArrayOutputStream out = new ByteArrayOutputStream();
+    Document jsonDoc =
+        Document.ofBytes(
+            UUID.randomUUID().toString(),
+            Container.ENTRY_PRODUCT_JSON,
+            "application/json",
+            null,
+            null,
+            null,
+            jsonBytes);
+    ContainerHelper.create(
+        out, List.of(jsonDoc), Container.ContainerType.DIGITAL_REFERENCE_CONTAINER);
+
+    byte[] content = out.toByteArray();
 
     Reference reference = new Reference();
     reference.setTicketId(ticketId);
@@ -45,7 +69,7 @@ public class ReferenceService {
     reference.setContent(content);
     reference.setPrice(price);
     reference.setDuration(duration);
-    reference.setContentType("application/json");
+    reference.setContentType(Container.MIMETYPE_DIGITAL_REFERENCE_CONTAINER);
     reference.setSize((long) content.length);
     reference.setState(ReferenceState.CREATED);
 

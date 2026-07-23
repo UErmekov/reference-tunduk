@@ -1,20 +1,12 @@
 package kg.uluk.reference.endpoint;
 
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.xml.bind.JAXBElement;
-import javax.xml.namespace.QName;
+import java.io.IOException;
 import kg.uluk.reference.service.ReferenceMapper;
-import kg.university.hub.xsd.producer.v1.TicketCancelResponseType;
-import kg.university.hub.xsd.producer.v1.TicketConfirmResponseType;
-import kg.university.hub.xsd.producer.v1.TicketCreateRequestType;
-import kg.university.hub.xsd.producer.v1.TicketCreateResponseType;
-import kg.university.hub.xsd.producer.v1.TicketRetrieveResponseType;
+import kg.university.hub.xsd.producer.v1.*;
 import org.springframework.ws.server.endpoint.annotation.Endpoint;
 import org.springframework.ws.server.endpoint.annotation.PayloadRoot;
 import org.springframework.ws.server.endpoint.annotation.RequestPayload;
 import org.springframework.ws.server.endpoint.annotation.ResponsePayload;
-import org.springframework.ws.transport.context.TransportContextHolder;
-import org.springframework.ws.transport.http.HttpServletConnection;
 
 @Endpoint
 public class ReferenceEndpoint {
@@ -26,42 +18,28 @@ public class ReferenceEndpoint {
     this.referenceMapper = referenceMapper;
   }
 
-  @PayloadRoot(namespace = NAMESPACE, localPart = "TicketRequest")
+  @PayloadRoot(namespace = NAMESPACE, localPart = "TicketCreateRequest")
   @ResponsePayload
-  public JAXBElement<?> handle(@RequestPayload TicketCreateRequestType request) {
-    String action = extractSoapAction();
-
-    return switch (action) {
-      case "create" -> new JAXBElement<>(
-          new QName(NAMESPACE, "TicketCreateResponse"),
-          TicketCreateResponseType.class,
-          referenceMapper.create(request));
-      case "confirm" -> new JAXBElement<>(
-          new QName(NAMESPACE, "TicketConfirmResponse"),
-          TicketConfirmResponseType.class,
-          referenceMapper.confirm(request.getTicketId()));
-      case "retrieve" -> new JAXBElement<>(
-          new QName(NAMESPACE, "TicketRetrieveResponse"),
-          TicketRetrieveResponseType.class,
-          referenceMapper.retrieve(request.getTicketId()));
-      case "cancel" -> new JAXBElement<>(
-          new QName(NAMESPACE, "TicketCancelResponse"),
-          TicketCancelResponseType.class,
-          referenceMapper.cancel(request.getTicketId()));
-      default -> throw new IllegalArgumentException("Unknown SOAP action: " + action);
-    };
+  public TicketCreateResponseType create(@RequestPayload TicketCreateRequestType request)
+      throws IOException {
+    return referenceMapper.create(request);
   }
 
-  private String extractSoapAction() {
-    var transportContext = TransportContextHolder.getTransportContext();
-    if (transportContext != null
-        && transportContext.getConnection() instanceof HttpServletConnection httpConnection) {
-      HttpServletRequest httpRequest = httpConnection.getHttpServletRequest();
-      String action = httpRequest.getHeader("SOAPAction");
-      if (action != null) {
-        return action.replace("\"", "").trim();
-      }
-    }
-    return "";
+  @PayloadRoot(namespace = NAMESPACE, localPart = "TicketConfirmRequest")
+  @ResponsePayload
+  public TicketConfirmResponseType confirm(@RequestPayload TicketConfirmRequestType request) {
+    return referenceMapper.confirm(request.getTicketId());
+  }
+
+  @PayloadRoot(namespace = NAMESPACE, localPart = "TicketRetrieveRequest")
+  @ResponsePayload
+  public TicketRetrieveResponseType retrieve(@RequestPayload TicketRetrieveRequestType request) {
+    return referenceMapper.retrieve(request.getTicketId());
+  }
+
+  @PayloadRoot(namespace = NAMESPACE, localPart = "TicketCancelRequest")
+  @ResponsePayload
+  public TicketCancelResponseType cancel(@RequestPayload TicketCancelRequestType request) {
+    return referenceMapper.cancel(request.getTicketId());
   }
 }
