@@ -18,26 +18,26 @@ public class ReferenceEndpoint {
     this.referenceMapper = referenceMapper;
   }
 
-  @PayloadRoot(namespace = NAMESPACE, localPart = "TicketRequest")
+  @PayloadRoot(namespace = NAMESPACE, localPart = "TicketCreateRequest")
   @ResponsePayload
   public TicketCreateResponseType create(@RequestPayload TicketCreateRequestType request)
       throws IOException {
     return referenceMapper.create(request);
   }
 
-  @PayloadRoot(namespace = NAMESPACE, localPart = "TicketRequest")
+  @PayloadRoot(namespace = NAMESPACE, localPart = "TicketConfirmRequest")
   @ResponsePayload
   public TicketConfirmResponseType confirm(@RequestPayload TicketConfirmRequestType request) {
     return referenceMapper.confirm(request.getTicketId());
   }
 
-  @PayloadRoot(namespace = NAMESPACE, localPart = "TicketRequest")
+  @PayloadRoot(namespace = NAMESPACE, localPart = "TicketRetrieveRequest")
   @ResponsePayload
   public TicketRetrieveResponseType retrieve(@RequestPayload TicketRetrieveRequestType request) {
     return referenceMapper.retrieve(request.getTicketId());
   }
 
-  @PayloadRoot(namespace = NAMESPACE, localPart = "TicketRequest")
+  @PayloadRoot(namespace = NAMESPACE, localPart = "TicketCancelRequest")
   @ResponsePayload
   public TicketCancelResponseType cancel(@RequestPayload TicketCancelRequestType request) {
     return referenceMapper.cancel(request.getTicketId());

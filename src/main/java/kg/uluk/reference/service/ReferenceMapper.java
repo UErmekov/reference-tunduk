@@ -1,7 +1,6 @@
 package kg.uluk.reference.service;
 
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.util.Map;
 import java.util.stream.Collectors;
 import kg.uluk.reference.domain.ReferenceService;
@@ -17,7 +16,7 @@ import kg.university.hub.xsd.producer.v1.TicketCreateResponseType;
 import kg.university.hub.xsd.producer.v1.TicketRetrieveResponseType;
 
 public class ReferenceMapper {
-  private static final BigDecimal PRICE = BigDecimal.valueOf(160.0);
+  //  private static final BigDecimal PRICE = BigDecimal.valueOf(160.0);
   private static final Long DURATION = 60L;
 
   private final ReferenceService referenceService;
@@ -36,7 +35,8 @@ public class ReferenceMapper {
             .collect(Collectors.toMap(ParamType::getKey, ParamType::getValue));
 
     ReferenceCreateResponse response =
-        referenceService.create(request.getTicketId(), request.getOwner(), params, PRICE, DURATION);
+        referenceService.create(
+            request.getTicketId(), request.getOwnerId(), params, null, DURATION);
 
     TicketCreateResponseType result = new TicketCreateResponseType();
     result.setContent(response.content());

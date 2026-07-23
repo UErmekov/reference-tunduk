@@ -29,7 +29,7 @@
     <properties>
         <java.version>17</java.version>
         <pdfbox.version>3.0.7</pdfbox.version>
-        <integration.version>0.0.4-SNAPSHOT</integration.version>
+        <integration.version>0.0.7-SNAPSHOT</integration.version>
     </properties>
     <dependencies>
         <dependency>
@@ -39,6 +39,11 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-webmvc</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.jvnet.jaxb</groupId>
+            <artifactId>jaxb-plugins-runtime</artifactId>
+            <version>4.0.12</version>
         </dependency>
 
         <dependency>
